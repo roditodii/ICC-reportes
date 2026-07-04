@@ -178,44 +178,61 @@
     <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border border-slate-100 my-auto">
         <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
             <i data-lucide="file-text" class="text-blue-600 w-5 h-5"></i>
-            Detalles del Reporte
+            Formato de Reporte: Plantillas Pintadas
         </h3>
 
         <form onsubmit="savePin(event)" class="grid grid-cols-1 gap-4">
             <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">Cliente / Marca</label>
-                <input type="text" id="pin-name" required placeholder="Ej. Coca-Cola" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
+                <label class="block text-xs font-semibold text-slate-500 mb-1">Domicilio / Referencia</label>
+                <textarea id="pin-domicilio" required placeholder="Ej. A 1 CUADRA DE LA CARRETERA SINALOA NAVOLATO - EL CASTILLO" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50" rows="2"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
                 <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Colonia / Comunidad</label>
+                    <input type="text" id="pin-colonia" required placeholder="Ej. SATAYA CP 80370" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
+                </div>
+                <div>
                     <label class="block text-xs font-semibold text-slate-500 mb-1">Tipo Material</label>
                     <select id="pin-category" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-white">
-                        <option value="Barda">Barda</option>
+                        <option value="Barda">Barda / Plantilla</option>
                         <option value="Lona">Lona</option>
                         <option value="Microperforado">Microperforado</option>
                     </select>
                 </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 mb-1">Fecha Instalación</label>
-                    <input type="date" id="pin-date" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-white">
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Municipio</label>
+                    <input type="text" id="pin-municipio" required placeholder="Ej. NAVOLATO, SINALOA" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Distrito Local</label>
+                    <input type="text" id="pin-distrito" required placeholder="Ej. DISTRITO 10" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-semibold text-slate-500 mb-1">Evidencia Fotográfica</label>
-                <label class="flex items-center justify-center gap-2 w-full h-12 border border-dashed border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-blue-400 transition px-4 group">
-                    <i data-lucide="camera" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition"></i>
-                    <p id="upload-text" class="text-xs text-slate-500 font-medium truncate">Subir o tomar foto</p>
-                    <input id="pin-image" type="file" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelection(this)">
-                </label>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Fecha de Pintado</label>
+                    <input type="date" id="pin-date" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 mb-1">Evidencia Fotográfica</label>
+                    <label class="flex items-center justify-center gap-2 w-full h-10 border border-dashed border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 hover:border-blue-400 transition px-2 group">
+                        <i data-lucide="camera" class="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition"></i>
+                        <p id="upload-text" class="text-[11px] text-slate-500 font-medium truncate">Tomar foto</p>
+                        <input id="pin-image" type="file" accept="image/*" capture="environment" class="hidden" onchange="handleImageSelection(this)">
+                    </label>
+                </div>
             </div>
 
             <div class="bg-slate-50/80 p-3.5 rounded-xl border border-slate-100 space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-slate-600 uppercase tracking-wide">Ubicación Geográfica</span>
                     <button type="button" onclick="getCurrentLocation()" class="text-[11px] flex items-center gap-1 text-blue-600 font-bold hover:text-blue-700 transition bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 cursor-pointer">
-                        <i data-lucide="locate" class="w-3 h-3"></i> Usar mi ubicación
+                        <i data-lucide="locate" class="w-3 h-3"></i> GPS
                     </button>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -226,7 +243,7 @@
 
             <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">Observaciones</label>
-                <textarea id="pin-notes" placeholder="Ej. Instalación limpia..." class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50" rows="2"></textarea>
+                <input type="text" id="pin-notes" placeholder="Ej. Detalle de pintura, barda limpia..." class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
             </div>
 
             <div class="flex gap-3 pt-2 border-t border-slate-100 mt-1">
@@ -234,7 +251,7 @@
                     Cancelar
                 </button>
                 <button type="submit" class="flex-1 h-10 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shadow-md shadow-blue-500/10 cursor-pointer text-center">
-                    Guardar Pin
+                    Guardar Reporte
                 </button>
             </div>
         </form>
@@ -302,13 +319,16 @@
             document.getElementById('pin-date').value = new Date().toISOString().split('T')[0];
         } else {
             modal.classList.add('hidden');
-            document.getElementById('pin-name').value = '';
+            document.getElementById('pin-domicilio').value = '';
+            document.getElementById('pin-colonia').value = '';
+            document.getElementById('pin-municipio').value = '';
+            document.getElementById('pin-distrito').value = '';
             document.getElementById('pin-notes').value = '';
             document.getElementById('pin-lat').value = '';
             document.getElementById('pin-lng').value = '';
             document.getElementById('pin-image').value = '';
-            document.getElementById('upload-text').innerText = "Subir o tomar foto";
-            document.getElementById('upload-text').className = "text-xs text-slate-500 font-medium truncate";
+            document.getElementById('upload-text').innerText = "Tomar foto";
+            document.getElementById('upload-text').className = "text-[11px] text-slate-500 font-medium truncate";
             currentBase64Image = "";
         }
     }
@@ -465,14 +485,15 @@
                 let imageMarkup = pin.image ? `<img src="${pin.image}" class="w-full h-28 object-cover rounded-lg mt-2 mb-1 shadow-xs border border-slate-100">` : "";
 
                 const popupContent = `
-                    <div class="font-sans min-w-[200px] max-w-[220px] p-0.5">
-                        <p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider m-0">${pin.category}</p>
-                        <p class="text-sm font-bold text-slate-800 border-b border-slate-100 pb-1 mb-1">${pin.name}</p>
-                        ${imageMarkup}
-                        <p class="text-[11px] text-slate-500 m-0 mt-1">📅 Inst: <b>${pin.date}</b></p>
-                        <p class="text-[10px] font-mono text-slate-400 mt-0.5 mb-1">📍 ${parseFloat(pin.lat).toFixed(5)}, ${parseFloat(pin.lng).toFixed(5)}</p>
-                        <p class="text-[11px] text-slate-600 italic mt-1 bg-slate-50 p-1.5 rounded border border-slate-100">"${pin.notes}"</p>
-                    </div>`;
+    <div class="font-sans min-w-[220px] max-w-[250px] p-0.5">
+        <p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider m-0">${pin.category} | ${pin.distrito}</p>
+        <p class="text-xs font-bold text-slate-800 m-0">${pin.domicilio}</p>
+        <p class="text-[11px] text-slate-500 mt-0.5 mb-1">📍 ${pin.colonia}, ${pin.municipio}</p>
+        ${imageMarkup}
+        <p class="text-[11px] text-slate-600 m-0 mt-1">📅 Pintado: <b>${pin.date}</b></p>
+        <p class="text-[10px] font-mono text-slate-400 mt-0.5 mb-1">📌 ${parseFloat(pin.lat).toFixed(5)}, ${parseFloat(pin.lng).toFixed(5)}</p>
+        <p class="text-[11px] text-slate-600 italic mt-1 bg-slate-50 p-1.5 rounded border border-slate-100">"${pin.notes}"</p>
+    </div>`;
 
                 const marker = L.marker([parseFloat(pin.lat), parseFloat(pin.lng)], { icon: customIcon });
                 marker.bindPopup(popupContent);
@@ -486,23 +507,37 @@
         event.preventDefault();
         const latVal = document.getElementById('pin-lat').value.trim();
         const lngVal = document.getElementById('pin-lng').value.trim();
-        const lat = parseFloat(latVal); const lng = parseFloat(lngVal);
+        const lat = parseFloat(latVal);
+        const lng = parseFloat(lngVal);
 
         if (isNaN(lat) || isNaN(lng)) { alert("Por favor ingresa coordenadas válidas."); return; }
 
+        // Mapeo estructurado idéntico a las columnas de tu .xlsx
         const newPin = {
-            name: document.getElementById('pin-name').value,
-            category: document.getElementById('pin-category').value,
-            date: document.getElementById('pin-date').value,
-            notes: document.getElementById('pin-notes').value || "Sin novedades",
-            lat: lat, lng: lng, image: currentBase64Image
+            domicilio: document.getElementById('pin-domicilio').value.trim(),
+            colonia: document.getElementById('pin-colonia').value.trim(),
+            municipio: document.getElementById('pin-municipio').value.trim(),
+            distrito: document.getElementById('pin-distrito').value.trim(),
+            category: document.getElementById('pin-category').value, // Para filtros visuales del mapa
+            date: document.getElementById('pin-date').value, // Fecha pintado
+            notes: document.getElementById('pin-notes').value.trim() || "Sin observaciones",
+            lat: lat,
+            lng: lng,
+            image: currentBase64Image
         };
 
         savedPins.push(newPin);
-        try { localStorage.setItem('icc_pins', JSON.stringify(savedPins)); }
-        catch (e) { alert("Error de espacio: intenta con una foto más ligera."); savedPins.pop(); return; }
+        try {
+            localStorage.setItem('icc_pins', JSON.stringify(savedPins));
+        } catch (e) {
+            alert("Error de espacio: la foto es demasiado pesada para el almacenamiento local temporal.");
+            savedPins.pop();
+            return;
+        }
 
-        toggleModal(false); updateMapDisplay(); map.panTo([newPin.lat, newPin.lng]);
+        toggleModal(false);
+        updateMapDisplay();
+        map.panTo([newPin.lat, newPin.lng]);
     }
 
     function toggleOtroMedio() {
