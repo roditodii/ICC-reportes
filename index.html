@@ -282,6 +282,8 @@
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('main-screen').classList.remove('hidden');
         document.getElementById('categories-dropdown').classList.add('hidden');
+
+        // Inicializamos el mapa justo AQUÍ, cuando el contenedor ya es visible en pantalla
         initMap();
         updateMapDisplay();
     }
@@ -346,6 +348,10 @@
 
     function initMap() {
         if (!map) {
+            // Añadimos una pequeña validación para asegurarnos de que el div exista antes de montar Leaflet
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
+
             map = L.map('map', { minZoom: 9, maxZoom: 19 }).setView([24.8050, -107.3940], 11);
             L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: 'Tiles &copy; Esri &mdash; Source: Esri'
