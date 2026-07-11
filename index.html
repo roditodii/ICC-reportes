@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" href="Icc.png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SDK Oficial de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -264,6 +266,11 @@
 </div>
 
 <script>
+        // Inicialización de Supabase con tus credenciales
+    const SUPABASE_URL = "https://rnszjvpgcxjmlzlnulir.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuc3pqdnBnY3hqbWx6bG51bGlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MzY0NDcsImV4cCI6MjA5OTMxMjQ0N30.uqGFdMpr52fBm44BbE2G81xEJtOasMD9P8dIn1FIqkg";
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     let map;
     let savedPins = JSON.parse(localStorage.getItem('icc_pins')) || [];
     let savedAsambleas = JSON.parse(localStorage.getItem('icc_asambleas')) || [];
@@ -508,41 +515,106 @@
         lucide.createIcons();
     }
 
-    function savePin(event) {
-        event.preventDefault();
-        const latVal = document.getElementById('pin-lat').value.trim();
-        const lngVal = document.getElementById('pin-lng').value.trim();
-        const lat = parseFloat(latVal);
-        const lng = parseFloat(lngVal);
+    async function savePin(event) {
+    event.preventDefault();
+    const latVal = document.getElementById('pin-lat').value.trim();
+    const lngVal = document.getElementById('pin-lng').value.trim();
+    const lat = parseFloat(latVal);
+    const lng = parseFloat(lngVal);
 
-        if (isNaN(lat) || isNaN(lng)) { alert("Por favor ingresa coordenadas válidas."); return; }
+    if (isNaN(lat) || isNaN(lng)) {
+        alert("Por favor ingresa coordenadas válidas.");
+        return;
+    }
 
-        // Mapeo estructurado idéntico a las columnas de tu .xlsx
-        const newPin = {
-            domicilio: document.getElementById('pin-domicilio').value.trim(),
-            colonia: document.getElementById('pin-colonia').value.trim(),
-            municipio: document.getElementById('pin-municipio').value.trim(),
-            distrito: document.getElementById('pin-distrito').value.trim(),
-            category: document.getElementById('pin-category').value, // Para filtros visuales del mapa
-            date: document.getElementById('pin-date').value, // Fecha pintado
-            notes: document.getElementById('pin-notes').value.trim() || "Sin observaciones",
-            lat: lat,
-            lng: lng,
-            image: currentBase64Image
+    // Cambiamos el botón a estado "Guardando..." para mejor UX
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = "Guardando en la nube...";
+    submitBtn.disabled = true;
+
+    // Estructura limpia que mapea exactamente con las columnas de tu SQL
+    const newPinData = {
+        domicilio: document.getElementById('pin-domicilio').value.trim(),
+        colonia: document.getElementById('pin-colonia').value.trim(),
+        municipio: document.getElementById('pin-municipio').value.trim(),
+        distrito_local: document.getElementById('pin-distrito').value.trim(),
+        categoria: document.getElementById('pin-category').value,
+        fecha_pintado: document.getElementById('pin-date').value,
+        observaciones: document.getElementById('pin-notes').value.trim() || "Sin observaciones",
+        latitud: lat,
+        longitud: lng,
+        url_evidencia: currentBase64Image // Temporalmente guardamos el base64 en la celda de texto
+    };
+
+    try {
+        // Inserción directa en la tabla de Supabase
+        const { data, error } = await supabase
+            .from('reportes_pines')
+            .insert([newPinData])
+            .select();
+
+        if (error) throw error;
+
+        // Si se insertó con éxito, lo añadimos localmente a la vista del mapa
+        const pinParaMapa = {
+            domicilio: newPinData.domicilio,
+            colonia: newPinData.colonia,
+            municipio: newPinData.municipio,
+            distrito: newPinData.distrito_local,
+            category: newPinData.categoria,
+            date: newPinData.fecha_pintado,
+            notes: newPinData.observaciones,
+            lat: newPinData.latitud,
+            lng: newPinData.longitud,
+            image: newPinData.url_evidencia
         };
 
-        savedPins.push(newPin);
-        try {
-            localStorage.setItem('icc_pins', JSON.stringify(savedPins));
-        } catch (e) {
-            alert("Error de espacio: la foto es demasiado pesada para el almacenamiento local temporal.");
-            savedPins.pop();
-            return;
-        }
+        savedPins.push(pinParaMapa);
 
         toggleModal(false);
         updateMapDisplay();
-        map.panTo([newPin.lat, newPin.lng]);
+        map.panTo([pinParaMapa.lat, pinParaMapa.lng]);
+
+    } catch (err) {
+        console.error("Error al guardar en Supabase:", err);
+        alert("Error al conectar con el servidor en la nube: " + err.message);
+    } finally {
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
+// ==========================================
+    // DESCARGAR REPORTES DESDE LA NUBE (SUPABASE)
+    // ==========================================
+    async function loadPinesFromSupabase() {
+        try {
+            const { data, error } = await supabase
+                .from('reportes_pines')
+                .select('*');
+
+            if (error) throw error;
+
+            if (data) {
+                // Mapeamos las columnas de PostgreSQL al formato que usa tu mapa
+                savedPins = data.map(pin => ({
+                    domicilio: pin.domicilio,
+                    colonia: pin.colonia,
+                    municipio: pin.municipio,
+                    distrito: pin.distrito_local, // Hace match con distrito_local de la BD
+                    category: pin.categoria,      // Hace match con categoria de la BD
+                    date: pin.fecha_pintado,     // Hace match con fecha_pintado de la BD
+                    notes: pin.observaciones,
+                    lat: parseFloat(pin.latitud),
+                    lng: parseFloat(pin.longitud),
+                    image: pin.url_evidencia
+                }));
+                updateMapDisplay();
+            }
+        } catch (err) {
+            console.error("Error al cargar datos iniciales:", err);
+        }
     }
 
     function toggleOtroMedio() {
