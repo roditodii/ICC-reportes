@@ -102,13 +102,14 @@
         </button>
     </div>
 
-    <div id="tab-mapa" class="w-full h-full absolute inset-0 z-0">
+    <!-- PESTAÑA 1: VISTA DEL MAPA (Contenedor principal con relative) -->
+    <div id="tab-mapa" class="w-full h-full relative">
 
-        <!-- CONTENEDOR DEL MAPA: Aseguramos posición relativa para que el botón no se meta abajo -->
-        <div id="map" class="w-full h-full relative z-10"></div>
+        <!-- EL MAPA: Déjalo completamente solo aquí adentro -->
+        <div id="map" class="w-full h-full z-10"></div>
 
-        <!-- BOTÓN FLOTANTE: Forzamos z-40 y posición fija/absoluta controlada -->
-        <button type="button" onclick="toggleModal(true)" class="absolute bottom-6 right-6 p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105 transition duration-200 flex items-center justify-center cursor-pointer group z-40 select-none">
+        <!-- EL BOTÓN: Ponlo completamente AFUERA del div "map", pero ADENTRO de "tab-mapa" -->
+        <button type="button" onclick="toggleModal(true)" class="fixed bottom-6 right-6 p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105 transition duration-200 flex items-center justify-center cursor-pointer group z-[9999] select-none">
             <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition duration-200"></i>
             <span class="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 ease-out font-semibold text-sm whitespace-nowrap">
                 Agregar Pin
