@@ -6,6 +6,7 @@
     <title>Consulta de Asambleas</title>
     <!-- Tailwind CSS para los estilos -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Lucide Icons para los iconos -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -58,38 +59,67 @@
 </div>
 
 <script>
-    // Inicializar iconos
+
+    // 1. IMPORTANTE: Agrega tus credenciales e inicialización que usas en el mapa
+    const SUPABASE_URL = "https://rnszjvpgcxjmlzlnulir.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuc3pqdnBnY3hqbWx6bG51bGlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MzY0NDcsImV4cCI6MjA5OTMxMjQ0N30.uqGFdMpr52fBm44BbE2G81xEJtOasMD9P8dIn1FIqkg";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Inicializar iconos de Lucide
     lucide.createIcons();
 
-    // Cargar datos desde el LocalStorage compartido
-    function cargarAsambleas() {
-        const savedAsambleas = JSON.parse(localStorage.getItem('icc_asambleas')) || [];
-        const tbody = document.getElementById('tabla-asambleas-body');
-        const estadoVacio = document.getElementById('estado-vacio');
+    // Cargar datos desde Cloud
+    async function cargarAsambleas() {
+    const tbody = document.getElementById('tabla-asambleas-body');
+    const estadoVacio = document.getElementById('estado-vacio');
+    if (!tbody || !estadoVacio) return;
 
-        if (savedAsambleas.length === 0) {
+    tbody.innerHTML = '';
+
+    try {
+        // Traemos los datos directo de Supabase ordenados por los más recientes
+        const { data: savedAsambleas, error } = await supabaseClient
+            .from('registro_asambleas')
+            .select('*')
+            .order('fecha_registro', { ascending: false });
+
+        if (error) throw error;
+
+        if (!savedAsambleas || savedAsambleas.length === 0) {
             estadoVacio.classList.remove('hidden');
             return;
         }
 
         estadoVacio.classList.add('hidden');
-        tbody.innerHTML = savedAsambleas.map(asamblea => `
-            <tr class="hover:bg-slate-50/50 transition">
-                <td class="p-4 font-medium text-slate-900">${asamblea.nombre}</td>
-                <td class="p-4 text-slate-500">${asamblea.edad} años</td>
-                <td class="p-4 font-mono text-xs text-slate-600">${asamblea.telefono}</td>
-                <td class="p-4 text-slate-600">📍 ${asamblea.colonia}</td>
-                <td class="p-4">
-                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
-                        ${asamblea.medio}
-                    </span>
-                </td>
-                <td class="p-4 text-xs text-slate-400">${asamblea.fechaRegistro || 'N/A'}</td>
-            </tr>
-        `).join('');
-    }
 
-    // Ejecutar al cargar la página
+        tbody.innerHTML = savedAsambleas.map(asamblea => {
+            // Formatear la fecha que viene de Postgres a algo legible localmente
+            const fechaFormateada = asamblea.fecha_registro
+                ? new Date(asamblea.fecha_registro).toLocaleString()
+                : 'N/A';
+
+            return `
+                <tr class="hover:bg-slate-50/50 transition border-b border-slate-100">
+                    <td class="p-4 font-medium text-slate-900">${asamblea.nombre}</td>
+                    <td class="p-4 text-slate-500">${asamblea.edad} años</td>
+                    <td class="p-4 font-mono text-xs text-slate-600">${asamblea.telefono}</td>
+                    <td class="p-4 text-slate-600">📍 ${asamblea.colonia}</td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                            ${asamblea.medio}
+                        </span>
+                    </td>
+                    <td class="p-4 text-xs text-slate-400">${fechaFormateada}</td>
+                </tr>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error("Error al cargar asambleas de la nube:", err);
+    }
+}
+
+    // Ejecutar de forma segura cuando el DOM esté completamente listo
     document.addEventListener('DOMContentLoaded', cargarAsambleas);
 </script>
 </body>

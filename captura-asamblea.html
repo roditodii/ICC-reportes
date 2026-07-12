@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICC - Captura de Asambleas</title>
+    <link rel="icon" type="image/png" href="Icc.png">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen flex items-center justify-center p-4">
+
+<div class="max-w-2xl w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-6 my-8">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+        <div class="flex items-center gap-3">
+            <div class="p-3 bg-indigo-100 text-indigo-700 rounded-xl">
+                <i data-lucide="user-plus" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-slate-800">Captura de Asambleas</h2>
+                <p class="text-sm text-slate-500">Ingresa los datos correspondientes de los ciudadanos de la reunión.</p>
+            </div>
+        </div>
+        <a href="mapa.html" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+        </a>
+    </div>
+
+    <form id="asamblea-form" onsubmit="saveAsamblea(event)" class="space-y-4">
+        <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Nombre Completo</label>
+            <input type="text" id="asam-nombre" required placeholder="Ej. Juan Pérez López" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-slate-50/50">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Edad</label>
+                <input type="number" id="asam-edad" required min="1" max="120" placeholder="Ej. 35" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-slate-50/50">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Teléfono</label>
+                <input type="tel" id="asam-telefono" required placeholder="Ej. 6671234567" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-slate-50/50">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Colonia</label>
+            <input type="text" id="asam-colonia" required placeholder="Ej. Centro / Tres Ríos" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-slate-50/50">
+        </div>
+
+        <div>
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">¿Cómo te enteraste de la asamblea?</label>
+            <select id="asam-medio" required onchange="toggleOtroMedio()" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-white cursor-pointer">
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="Redes Sociales">Redes Sociales (Facebook/WhatsApp)</option>
+                <option value="Volante / Perifoneo">Volante o Perifoneo</option>
+                <option value="Invitación de un vecino">Por invitación de un vecino</option>
+                <option value="Barda / Lona Publicitaria">Vi una barda / lona publicitaria</option>
+                <option value="Otro">Otro medio</option>
+            </select>
+        </div>
+
+        <div id="wrapper-otro-medio" class="hidden mt-3">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-indigo-600 mb-1">Especifica el medio</label>
+            <input type="text" id="asam-otro-especificar" placeholder="Ej. Periódico local, evento en plaza, etc." class="w-full px-4 py-2.5 text-sm rounded-xl border border-indigo-200 focus:outline-none focus:border-indigo-500 text-slate-700 bg-indigo-50/30">
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex justify-end gap-3">
+            <a href="mapa.html" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium rounded-xl transition text-sm flex items-center justify-center">
+                Cancelar
+            </a>
+            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-md shadow-indigo-500/10 transition cursor-pointer flex items-center gap-2 text-sm">
+                <i data-lucide="check" class="w-4 h-4"></i> Registrar Asistente
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    lucide.createIcons();
+
+    function toggleOtroMedio() {
+        const medioSelect = document.getElementById('asam-medio');
+        const wrapperOtro = document.getElementById('wrapper-otro-medio');
+        const inputEspecificar = document.getElementById('asam-otro-especificar');
+
+        if (medioSelect.value === 'Otro') {
+            wrapperOtro.classList.remove('hidden');
+            inputEspecificar.setAttribute('required', 'required');
+        } else {
+            wrapperOtro.classList.add('hidden');
+            inputEspecificar.removeAttribute('required');
+            inputEspecificar.value = '';
+        }
+    }
+
+    async function saveAsamblea(event) {
+    event.preventDefault();
+
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    const medioSeleccionado = document.getElementById('asam-medio').value;
+    const especificarValor = document.getElementById('asam-otro-especificar').value.trim();
+    const medioFinal = (medioSeleccionado === 'Otro') ? especificarValor : medioSeleccionado;
+
+    // Estructura idéntica a las columnas de la nueva tabla SQL
+    const nuevaAsamblea = {
+        nombre: document.getElementById('asam-nombre').value.trim(),
+        edad: parseInt(document.getElementById('asam-edad').value),
+        telefono: document.getElementById('asam-telefono').value.trim(),
+        colonia: document.getElementById('asam-colonia').value.trim(),
+        medio: medioFinal
+        // La fecha se genera automáticamente en la base de datos
+    };
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('registro_asambleas')
+            .insert([nuevaAsamblea]);
+
+        if (error) throw error;
+
+        alert("✓ Asistente registrado exitosamente en la nube.");
+        window.location.href = "asambleas.html"; // Redirección a la tabla
+    } catch (err) {
+        console.error("Error al guardar asamblea:", err);
+        alert("No se pudo guardar en la nube: " + err.message);
+        if (submitBtn) submitBtn.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
