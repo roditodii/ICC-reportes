@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Asambleas</title>
+    <!-- Tailwind CSS para los estilos -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Lucide Icons para los iconos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen text-slate-800">
+
+<div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- Encabezado y botón de regreso -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Registro de Asambleas</h1>
+            <p class="text-sm text-slate-500 mt-1">Listado de ciudadanos y asistentes registrados en campo.</p>
+        </div>
+        <a href="index.html" class="inline-flex items-center gap-2 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 font-medium text-sm px-4 py-2.5 rounded-xl shadow-xs transition cursor-pointer">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Volver al Mapa
+        </a>
+    </div>
+
+    <!-- Tabla de Datos -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <th class="p-4">Nombre Completo</th>
+                    <th class="p-4">Edad</th>
+                    <th class="p-4">Teléfono</th>
+                    <th class="p-4">Colonia</th>
+                    <th class="p-4">Medio de Entero</th>
+                    <th class="p-4">Fecha de Registro</th>
+                </tr>
+                </thead>
+                <tbody id="tabla-asambleas-body" class="divide-y divide-slate-100 text-sm text-slate-700">
+                <!-- Los datos se inyectarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estado vacío si no hay datos -->
+        <div id="estado-vacio" class="hidden p-12 text-center">
+            <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3 text-slate-400">
+                <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <p class="text-sm font-medium text-slate-900">No hay asistentes registrados</p>
+            <p class="text-xs text-slate-500 mt-1">Los datos que captures en el mapa aparecerán en esta tabla.</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Inicializar iconos
+    lucide.createIcons();
+
+    // Cargar datos desde el LocalStorage compartido
+    function cargarAsambleas() {
+        const savedAsambleas = JSON.parse(localStorage.getItem('icc_asambleas')) || [];
+        const tbody = document.getElementById('tabla-asambleas-body');
+        const estadoVacio = document.getElementById('estado-vacio');
+
+        if (savedAsambleas.length === 0) {
+            estadoVacio.classList.remove('hidden');
+            return;
+        }
+
+        estadoVacio.classList.add('hidden');
+        tbody.innerHTML = savedAsambleas.map(asamblea => `
+            <tr class="hover:bg-slate-50/50 transition">
+                <td class="p-4 font-medium text-slate-900">${asamblea.nombre}</td>
+                <td class="p-4 text-slate-500">${asamblea.edad} años</td>
+                <td class="p-4 font-mono text-xs text-slate-600">${asamblea.telefono}</td>
+                <td class="p-4 text-slate-600">📍 ${asamblea.colonia}</td>
+                <td class="p-4">
+                    <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        ${asamblea.medio}
+                    </span>
+                </td>
+                <td class="p-4 text-xs text-slate-400">${asamblea.fechaRegistro || 'N/A'}</td>
+            </tr>
+        `).join('');
+    }
+
+    // Ejecutar al cargar la página
+    document.addEventListener('DOMContentLoaded', cargarAsambleas);
+</script>
+</body>
+</html>
