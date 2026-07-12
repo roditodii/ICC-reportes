@@ -271,7 +271,7 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuc3pqdnBnY3hqbWx6bG51bGlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MzY0NDcsImV4cCI6MjA5OTMxMjQ0N30.uqGFdMpr52fBm44BbE2G81xEJtOasMD9P8dIn1FIqkg";
 
     // CAMBIA LA LÍNEA DE ABAJO (Usa 'Supabase' con S mayúscula a la derecha)
-    const supabaseClient = window.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let map;
     let savedPins = JSON.parse(localStorage.getItem('icc_pins')) || [];
