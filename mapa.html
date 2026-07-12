@@ -197,7 +197,7 @@
 
   async function loadPinesFromSupabase() {
       try {
-          const { data, error } = await supabase.from('reportes_pines').select('*');
+          const { data, error } = await supabaseClient.from('reportes_pines').select('*');
           if (error) throw error;
           if (data) {
               savedPins = data.map(pin => ({
