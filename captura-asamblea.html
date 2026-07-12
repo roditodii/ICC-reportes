@@ -77,57 +77,63 @@
 </div>
 
 <script>
-    lucide.createIcons();
 
-    function toggleOtroMedio() {
-        const medioSelect = document.getElementById('asam-medio');
-        const wrapperOtro = document.getElementById('wrapper-otro-medio');
-        const inputEspecificar = document.getElementById('asam-otro-especificar');
+    // 1. IMPORTANTE: Agrega tus credenciales e inicialización que usas en el mapa
+   const SUPABASE_URL = "https://rnszjvpgcxjmlzlnulir.supabase.co";
+   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuc3pqdnBnY3hqbWx6bG51bGlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MzY0NDcsImV4cCI6MjA5OTMxMjQ0N30.uqGFdMpr52fBm44BbE2G81xEJtOasMD9P8dIn1FIqkg";
+   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        if (medioSelect.value === 'Otro') {
-            wrapperOtro.classList.remove('hidden');
-            inputEspecificar.setAttribute('required', 'required');
-        } else {
-            wrapperOtro.classList.add('hidden');
-            inputEspecificar.removeAttribute('required');
-            inputEspecificar.value = '';
-        }
-    }
+   lucide.createIcons();
 
-    async function saveAsamblea(event) {
-    event.preventDefault();
+   function toggleOtroMedio() {
+       const medioSelect = document.getElementById('asam-medio');
+       const wrapperOtro = document.getElementById('wrapper-otro-medio');
+       const inputEspecificar = document.getElementById('asam-otro-especificar');
 
-    const submitBtn = event.target.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
+       if (medioSelect.value === 'Otro') {
+           wrapperOtro.classList.remove('hidden');
+           inputEspecificar.setAttribute('required', 'required');
+       } else {
+           wrapperOtro.classList.add('hidden');
+           inputEspecificar.removeAttribute('required');
+           inputEspecificar.value = '';
+       }
+   }
 
-    const medioSeleccionado = document.getElementById('asam-medio').value;
-    const especificarValor = document.getElementById('asam-otro-especificar').value.trim();
-    const medioFinal = (medioSeleccionado === 'Otro') ? especificarValor : medioSeleccionado;
+   async function saveAsamblea(event) {
+   event.preventDefault();
 
-    // Estructura idéntica a las columnas de la nueva tabla SQL
-    const nuevaAsamblea = {
-        nombre: document.getElementById('asam-nombre').value.trim(),
-        edad: parseInt(document.getElementById('asam-edad').value),
-        telefono: document.getElementById('asam-telefono').value.trim(),
-        colonia: document.getElementById('asam-colonia').value.trim(),
-        medio: medioFinal
-        // La fecha se genera automáticamente en la base de datos
-    };
+   const submitBtn = event.target.querySelector('button[type="submit"]');
+   if (submitBtn) submitBtn.disabled = true;
 
-    try {
-        const { data, error } = await supabaseClient
-            .from('registro_asambleas')
-            .insert([nuevaAsamblea]);
+   const medioSeleccionado = document.getElementById('asam-medio').value;
+   const especificarValor = document.getElementById('asam-otro-especificar').value.trim();
+   const medioFinal = (medioSeleccionado === 'Otro') ? especificarValor : medioSeleccionado;
 
-        if (error) throw error;
+   // Estructura idéntica a las columnas de la nueva tabla SQL
+   const nuevaAsamblea = {
+       nombre: document.getElementById('asam-nombre').value.trim(),
+       edad: parseInt(document.getElementById('asam-edad').value),
+       telefono: document.getElementById('asam-telefono').value.trim(),
+       colonia: document.getElementById('asam-colonia').value.trim(),
+       medio: medioFinal
+       // La fecha se genera automáticamente en la base de datos
+   };
 
-        alert("✓ Asistente registrado exitosamente en la nube.");
-        window.location.href = "asambleas.html"; // Redirección a la tabla
-    } catch (err) {
-        console.error("Error al guardar asamblea:", err);
-        alert("No se pudo guardar en la nube: " + err.message);
-        if (submitBtn) submitBtn.disabled = false;
-    }
+   try {
+       const { data, error } = await supabaseClient
+           .from('registro_asambleas')
+           .insert([nuevaAsamblea]);
+
+       if (error) throw error;
+
+       alert("✓ Asistente registrado exitosamente en la nube.");
+       window.location.href = "asambleas.html"; // Redirección a la tabla
+   } catch (err) {
+       console.error("Error al guardar asamblea:", err);
+       alert("No se pudo guardar en la nube: " + err.message);
+       if (submitBtn) submitBtn.disabled = false;
+   }
 }
 </script>
 </body>
