@@ -3,46 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICC - Iniciar Sesión</title>
-    <link rel="icon" type="image/png" href="Icc.png">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Plataforma ICC - Inicio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-50 font-sans h-screen flex items-center justify-center p-4">
+<body class="bg-slate-900 font-sans antialiased text-slate-100 min-h-screen flex flex-col">
 
-<div id="login-screen" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100">
-    <div class="flex flex-col items-center mb-8">
-        <div class="mb-4">
-            <img src="Icc.png" alt="Logo ICC" class="w-24 h-24 object-contain rounded-2xl shadow-md border border-slate-100">
-        </div>
-        <h1 class="text-2xl font-bold text-slate-800">ICC</h1>
-        <h3 class="text-base font-semibold text-slate-500 mt-1">Reportes</h3>
-        <p class="text-sm text-slate-400 mt-1">Ingresa tus credenciales para continuar</p>
+<!-- HERO CONTAINER CON IMAGEN DE FONDO -->
+<div class="relative min-h-screen flex flex-col justify-between overflow-hidden">
+
+    <!-- Imagen de Fondo con Overlay Oscuro -->
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80"
+             alt="Fondo Plataforma ICC"
+             class="w-full h-full object-cover object-center opacity-25">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
 
-    <form id="login-form" onsubmit="login(event)" class="space-y-5">
-        <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Correo Electrónico</label>
-            <input type="email" required placeholder="tu@correo.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
+    <!-- BARRA NAVEGACIÓN PRINCIPAL -->
+    <header class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+        <div class="flex items-center justify-between border-b border-slate-700/50 pb-4">
+
+            <!-- Logo e Identificación -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
+                    <img src="Icc.png" alt="Logo ICC" class="w-10 h-10 object-contain rounded-xl shadow-xs border border-slate-100 bg-white p-1">
+                </div>
+                <div>
+                    <span class="font-bold text-lg text-white tracking-tight block leading-none">ICC</span>
+                    <span class="text-[10px] text-indigo-400 font-medium tracking-wider uppercase">Plataforma Territorial</span>
+                </div>
+            </div>
+
+            <!-- Menú Horizontal Escritorio (Protegido por función de seguridad) -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-800/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/60">
+                <button onclick="requerirSesion('mapa.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                    <i data-lucide="map" class="w-4 h-4 text-indigo-400"></i>
+                    Mapa
+                </button>
+                <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400"></i>
+                    Territorio
+                </button>
+                <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                    <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i>
+                    Asambleas
+                </button>
+                <button onclick="requerirSesion('padron.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                    <i data-lucide="id-card" class="w-4 h-4 text-indigo-400"></i>
+                    Padrón
+                </button>
+                <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                    <i data-lucide="calendar" class="w-4 h-4 text-indigo-400"></i>
+                    Calendario
+                </button>
+            </nav>
+
+            <!-- Botón dinámico (Iniciar Sesión / Cerrar Sesión) -->
+            <div class="flex items-center gap-3" id="auth-button-container">
+
+                <!-- Se llena automáticamente vía JavaScript según el estado de la sesión -->
+
+            </div>
+
         </div>
-        <div>
-            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Contraseña</label>
-            <input type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-500 text-slate-700 bg-slate-50/50">
+
+        <!-- Menú Móvil Desplazable (Protegido) -->
+        <div class="md:hidden mt-3 flex items-center gap-2 overflow-x-auto pb-2">
+            <button onclick="requerirSesion('mapa.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+                <i data-lucide="map" class="w-3.5 h-3.5 text-indigo-400"></i> Mapa
+            </button>
+            <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-400"></i> Territorio
+            </button>
+            <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400"></i> Asambleas
+            </button>
+            <button onclick="requerirSesion('padron.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+                <i data-lucide="id-card" class="w-3.5 h-3.5 text-indigo-400"></i> Padrón
+            </button>
+            <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i> Calendario
+            </button>
         </div>
-        <button type="submit" class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/20 transition duration-200 cursor-pointer">
-            Iniciar Sesión
-        </button>
-    </form>
+    </header>
+
+    <!-- SECCIÓN HERO CENTRALIZADA -->
+    <main class="relative z-10 my-auto text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-12">
+
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 mb-6">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                Sistema de Control y Gestión Territorial
+            </span>
+
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            Gestión inteligente para tu estructura en territorio
+        </h1>
+
+        <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            Centraliza el monitoreo de bardas y propaganda, organiza el registro de asambleas, administra el padrón y coordina eventos en tiempo real.
+        </p>
+
+        <!-- Acceso Rápido / Botón Principal de Acción -->
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto" id="hero-cta-container">
+            <!-- Se llena dinámicamente con JS según la sesión -->
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA SIMPLE -->
+    <footer class="relative z-10 w-full max-w-7xl mx-auto px-4 py-6 border-t border-slate-800 text-center text-xs text-slate-500">
+        Plataforma ICC &copy; 2026. Todos los derechos reservados.
+    </footer>
+
 </div>
 
+<!-- LÓGICA DE AUTENTICACIÓN Y SEGURIDAD -->
 <script>
-    function login(event) {
-        event.preventDefault();
-        // Aquí puedes añadir tus validaciones si las requieres en el futuro.
-        // Por ahora, redirecciona directo al mapa al enviar.
-        window.location.href = "HomePage.html";
+    lucide.createIcons();
+
+    // 1. Verificación básica de sesión en almacenamiento local
+    function checkSession() {
+        return localStorage.getItem('icc_user_logged') === 'true';
     }
+
+    // 2. Control de acceso para el menú navegable
+    function requerirSesion(destinoUrl) {
+        if (checkSession()) {
+            window.location.href = destinoUrl;
+        } else {
+            alert("⚠️ Acceso Restringido: Debes iniciar sesión para acceder a este módulo.");
+            window.location.href = "login.html";
+        }
+    }
+
+    // 3. Función para cerrar sesión y limpiar almacenamiento
+    function logout() {
+        if (confirm("¿Estás seguro de que deseas cerrar sesión?")) {
+            localStorage.removeItem('icc_user_logged');
+            localStorage.removeItem('icc_user_data');
+            window.location.reload();
+        }
+    }
+
+    // 4. Renderizado dinámico de la UI según el estado de la sesión
+    document.addEventListener('DOMContentLoaded', () => {
+        const authContainer = document.getElementById('auth-button-container');
+        const heroCtaContainer = document.getElementById('hero-cta-container');
+        const estaLogueado = checkSession();
+
+        if (estaLogueado) {
+            // Usuario autenticado: Mostrar botón de acceso al mapa y cerrar sesión
+            authContainer.innerHTML = `
+                <button onclick="logout()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition cursor-pointer">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    Cerrar Sesión
+                </button>
+            `;
+
+            heroCtaContainer.innerHTML = `
+                <a href="mapa.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2">
+                    <i data-lucide="map" class="w-5 h-5"></i>
+                    Ir al Mapa Territorial
+                </a>
+            `;
+        } else {
+            // Usuario NO autenticado: Mostrar botón de Iniciar Sesión
+            authContainer.innerHTML = `
+                <a href="login.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/30">
+                    <i data-lucide="log-in" class="w-4 h-4"></i>
+                    Iniciar Sesión
+                </a>
+            `;
+
+            heroCtaContainer.innerHTML = `
+                <a href="login.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
+                    Iniciar Sesión
+                </a>
+            `;
+        }
+
+        // Regenerar íconos insertados dinámicamente
+        lucide.createIcons();
+    });
 </script>
 </body>
 </html>
-
-

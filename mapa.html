@@ -21,6 +21,12 @@
   <!-- Menú de navegación unificado -->
   <div class="absolute top-0 left-0 right-0 z-30 flex items-center gap-2 p-4 bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200 overflow-visible">
 
+    <!-- BOTÓN AÑADIDO: Volver a la Home Page (login.html) -->
+    <a href="index.html" class="bg-slate-100 hover:bg-slate-200 text-slate-800 p-3 rounded-xl flex items-center gap-2 font-medium text-sm transition cursor-pointer border border-slate-200" title="Volver al Inicio">
+      <i data-lucide="home" class="w-5 h-5 text-indigo-600"></i>
+      <span>Inicio</span>
+    </a>
+
     <a href="mapa.html" class="bg-blue-600 text-white p-3 rounded-xl flex items-center gap-2 font-medium text-sm transition cursor-pointer border border-blue-600">
       <i data-lucide="map" class="w-5 h-5"></i>
       <span>Ver Mapa</span>
@@ -57,7 +63,7 @@
           <input type="checkbox" id="filter-micro" checked onchange="updateMapDisplay()" class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
         </label>
         <div class="border-t border-slate-100 my-1"></div>
-        <a href="index.html" class="w-full flex items-center gap-3 p-2.5 text-left text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer">
+        <a href="login.html" class="w-full flex items-center gap-3 p-2.5 text-left text-sm font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition cursor-pointer">
           <div class="p-1.5 text-slate-400 bg-slate-100 rounded-lg"><i data-lucide="log-out" class="w-4 h-4"></i></div>
           Salir de la App
         </a>
@@ -305,7 +311,7 @@
       }
   }
 
-  // Tu algoritmo original de clusters intacto
+  // Algoritmo original de clusters intacto
   function updateMapDisplay() {
       if (!map || !markerLayerGroup) return;
       markerLayerGroup.clearLayers();
