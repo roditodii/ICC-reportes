@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Principal - ICC</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col font-sans">
+
+<!-- BARRA NAVEGACIÓN PRINCIPAL / MENÚ HORIZONTAL -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+
+            <!-- Logo / Identificador -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-md shadow-indigo-200">
+                    I
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 leading-tight">Plataforma ICC</h1>
+                    <p class="text-[11px] text-slate-500 font-medium">Control Territorio y Gestión</p>
+                </div>
+            </div>
+
+            <!-- MENÚ HORIZONTAL (Pantallas medianas y grandes) -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="mapa.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    Territorio
+                </a>
+
+                <a href="asambleas.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    Asambleas
+                </a>
+
+                <a href="padron.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">
+                    <i data-lucide="id-card" class="w-4 h-4"></i>
+                    Padrón
+                </a>
+
+                <a href="calendario.html" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    Calendario
+                </a>
+            </nav>
+
+            <!-- Usuario / Perfil -->
+            <div class="flex items-center gap-3">
+                <button onclick="logout()" class="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition cursor-pointer" title="Cerrar sesión">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MENÚ HORIZONTAL MÓVIL (Scroll horizontal responsivo para pantallas pequeñas) -->
+    <div class="md:hidden border-t border-slate-100 bg-slate-50/50 px-2 py-1.5 overflow-x-auto">
+        <div class="flex items-center gap-1 min-w-max">
+            <a href="mapa.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-200 shadow-2xs">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Territorio
+            </a>
+            <a href="asambleas.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-200 shadow-2xs">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Asambleas
+            </a>
+            <a href="padron.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-200 shadow-2xs">
+                <i data-lucide="id-card" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Padrón
+            </a>
+            <a href="calendario.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-white border border-slate-200 shadow-2xs">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-600"></i>
+                Calendario
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- CONTENIDO PRINCIPAL / CARDS DE ACCESO RÁPIDO -->
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-slate-900">Bienvenido al Panel de Control</h2>
+        <p class="text-sm text-slate-500 mt-1">Selecciona un módulo del menú superior o accede directamente desde las tarjetas.</p>
+    </div>
+
+    <!-- GRID DE ACCESOS DIRECTOS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+        <!-- Card Territorio -->
+        <a href="mapa.html" class="group bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-indigo-500 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">
+                    <i data-lucide="map-pin" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 group-hover:text-indigo-600 transition">Territorio</h3>
+                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">Mapa satelital interactivo, reporte de pines y cobertura de propaganda.</p>
+            </div>
+            <div class="mt-6 flex items-center text-xs font-semibold text-indigo-600 group-hover:translate-x-1 transition duration-200">
+                Abrir Mapa &rarr;
+            </div>
+        </a>
+
+        <!-- Card Asambleas -->
+        <a href="asambleas.html" class="group bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-indigo-500 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition">
+                    <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 group-hover:text-blue-600 transition">Asambleas</h3>
+                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">Registro de asistencias a reuniones y consulta de ciudadanos atendidos.</p>
+            </div>
+            <div class="mt-6 flex items-center text-xs font-semibold text-blue-600 group-hover:translate-x-1 transition duration-200">
+                Ver Registro &rarr;
+            </div>
+        </a>
+
+        <!-- Card Padrón -->
+        <a href="padron.html" class="group bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-indigo-500 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition">
+                    <i data-lucide="id-card" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 group-hover:text-emerald-600 transition">Padrón</h3>
+                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">Gestión de la base de datos de afiliados, coordinadores y simpatizantes.</p>
+            </div>
+            <div class="mt-6 flex items-center text-xs font-semibold text-emerald-600 group-hover:translate-x-1 transition duration-200">
+                Gestionar Padrón &rarr;
+            </div>
+        </a>
+
+        <!-- Card Calendario -->
+        <a href="calendario.html" class="group bg-white p-6 rounded-2xl border border-slate-200/80 hover:border-indigo-500 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+            <div>
+                <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-600 group-hover:text-white transition">
+                    <i data-lucide="calendar" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-bold text-slate-900 group-hover:text-amber-600 transition">Calendario</h3>
+                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">Programación de eventos, recorridos en territorio y fechas clave.</p>
+            </div>
+            <div class="mt-6 flex items-center text-xs font-semibold text-amber-600 group-hover:translate-x-1 transition duration-200">
+                Ver Agenda &rarr;
+            </div>
+        </a>
+
+    </div>
+
+</main>
+
+<script>
+    // Inicialización de íconos Lucide
+    lucide.createIcons();
+
+    function logout() {
+        // Lógica para cerrar sesión si la utilizas
+        window.location.href = "login.html"; // o la vista de login que tengas
+    }
+</script>
+</body>
+</html>
