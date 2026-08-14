@@ -12,6 +12,26 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
+
+    /* Estilos personalizados para el Popup tipo Tarjeta */
+    .leaflet-popup-content-wrapper {
+      padding: 0 !important;
+      border-radius: 1rem !important;
+      overflow: hidden !important;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+      border: 1px solid #e2e8f0 !important;
+    }
+
+    .leaflet-popup-content {
+      margin: 0 !important;
+      width: auto !important;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button {
+      color: #ffffff !important;
+      padding: 10px 10px 0 0 !important;
+      z-index: 30 !important;
+    }
   </style>
 </head>
 <body class="bg-slate-50 font-sans h-screen overflow-hidden">
@@ -21,7 +41,6 @@
   <!-- Menú de navegación unificado -->
   <div class="absolute top-0 left-0 right-0 z-30 flex items-center gap-2 p-4 bg-white/95 backdrop-blur-md shadow-md border-b border-slate-200 overflow-visible">
 
-    <!-- BOTÓN AÑADIDO: Volver a la Home Page (login.html) -->
     <a href="index.html" class="bg-slate-100 hover:bg-slate-200 text-slate-800 p-3 rounded-xl flex items-center gap-2 font-medium text-sm transition cursor-pointer border border-slate-200" title="Volver al Inicio">
       <i data-lucide="home" class="w-5 h-5 text-indigo-600"></i>
       <span>Inicio</span>
@@ -81,15 +100,15 @@
     </a>
   </div>
 
-  <!-- PESTAÑA: VISTA DEL MAPA -->
+  <!-- VISTA DEL MAPA -->
   <div id="tab-mapa" class="w-full h-full relative">
     <div id="map" class="w-full h-full z-10"></div>
 
     <button type="button" onclick="toggleModal(true)" class="fixed bottom-6 right-6 p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-2xl hover:shadow-blue-500/40 transform hover:scale-105 transition duration-200 flex items-center justify-center cursor-pointer group z-[9999] select-none">
       <i data-lucide="plus" class="w-6 h-6 group-hover:rotate-90 transition duration-200"></i>
       <span class="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-300 ease-out font-semibold text-sm whitespace-nowrap">
-                Agregar Pin
-            </span>
+        Agregar Pin
+      </span>
     </button>
   </div>
 </div>
@@ -174,7 +193,6 @@
 </div>
 
 <script>
-  // Inicialización de Supabase
   const SUPABASE_URL = "https://rnszjvpgcxjmlzlnulir.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJuc3pqdnBnY3hqbWx6bG51bGlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MzY0NDcsImV4cCI6MjA5OTMxMjQ0N30.uqGFdMpr52fBm44BbE2G81xEJtOasMD9P8dIn1FIqkg";
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -188,6 +206,15 @@
       lucide.createIcons();
       initMap();
       loadPinesFromSupabase();
+  });
+
+  // Cierra menú desplegable si das clic afuera
+  window.addEventListener('click', (e) => {
+      const btn = document.getElementById('btn-dropdown-categories');
+      const dropdown = document.getElementById('categories-dropdown');
+      if (btn && dropdown && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.add('hidden');
+      }
   });
 
   function initMap() {
@@ -207,6 +234,7 @@
           if (error) throw error;
           if (data) {
               savedPins = data.map(pin => ({
+                  id: pin.id,
                   domicilio: pin.domicilio,
                   colonia: pin.colonia,
                   municipio: pin.municipio,
@@ -216,7 +244,9 @@
                   notes: pin.observaciones,
                   lat: parseFloat(pin.latitud),
                   lng: parseFloat(pin.longitud),
-                  image: pin.url_evidencia
+                  image: pin.url_evidencia,
+                  responsable: pin.responsable || 'RANDY G. ROSS ALVAREZ',
+                  estado: pin.estado || 'Pendiente'
               }));
               updateMapDisplay();
           }
@@ -236,7 +266,6 @@
           document.getElementById('pin-date').value = new Date().toISOString().split('T')[0];
       } else {
           modal.classList.add('hidden');
-          // Limpiar campos del form
           document.getElementById('pin-domicilio').value = '';
           document.getElementById('pin-colonia').value = '';
           document.getElementById('pin-municipio').value = '';
@@ -311,7 +340,6 @@
       }
   }
 
-  // Algoritmo original de clusters intacto
   function updateMapDisplay() {
       if (!map || !markerLayerGroup) return;
       markerLayerGroup.clearLayers();
@@ -397,8 +425,68 @@
                   iconMarkup = '<div class="p-2 bg-purple-600 text-white rounded-full shadow-lg border-2 border-white flex items-center justify-center w-8 h-8"><i data-lucide="grid" class="w-4 h-4"></i></div>';
               }
               const customIcon = L.divIcon({ html: iconMarkup, className: 'custom-leaflet-icon', iconSize: [36, 36], iconAnchor: [18, 18] });
-              let imageMarkup = pin.image ? `<img src="${pin.image}" class="w-full h-28 object-cover rounded-lg mt-2 mb-1 shadow-xs border border-slate-100">` : "";
-              const popupContent = `<div class="font-sans min-w-[220px] max-w-[250px] p-0.5"><p class="text-[9px] font-bold text-blue-600 uppercase tracking-wider m-0">${pin.category} | ${pin.distrito}</p><p class="text-xs font-bold text-slate-800 m-0">${pin.domicilio}</p><p class="text-[11px] text-slate-500 mt-0.5 mb-1">📍 ${pin.colonia}, ${pin.municipio}</p>${imageMarkup}<p class="text-[11px] text-slate-600 m-0 mt-1">📅 Pintado: <b>${pin.date}</b></p><p class="text-[10px] font-mono text-slate-400 mt-0.5 mb-1">📌 ${pin.lat.toFixed(5)}, ${pin.lng.toFixed(5)}</p><p class="text-[11px] text-slate-600 italic mt-1 bg-slate-50 p-1.5 rounded border border-slate-100">"${pin.notes}"</p></div>`;
+
+              const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${pin.lat},${pin.lng}`;
+              const imgUrl = pin.image || "https://via.placeholder.com/300x150?text=Sin+Evidencia";
+
+              const popupContent = `
+                <div class="font-sans w-[280px] sm:w-[300px] text-slate-800 p-2 space-y-2">
+
+                  <!-- ENCABEZADO GUINDA -->
+                  <div class="bg-[#7A0026] text-white p-3 rounded-xl relative">
+                    <div class="flex items-center justify-between pr-4">
+                      <h4 class="font-bold text-sm tracking-wide m-0">
+                        ${pin.category} | ID ${pin.id || '20611'}
+                      </h4>
+                      <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider text-white">
+                        ${pin.estado}
+                      </span>
+                    </div>
+                    <p class="text-[10px] text-white/80 m-0 mt-1 font-medium truncate">
+                      Municipio ${pin.municipio || 'AHOME'} · ${pin.distrito || 'DISTRITO 5'}
+                    </p>
+                  </div>
+
+                  <!-- EVIDENCIA FOTOGRÁFICA -->
+                  <div class="bg-slate-50 p-2 rounded-xl border border-slate-200 text-center">
+                    <img src="${imgUrl}" class="w-full h-36 object-cover rounded-lg border border-slate-200" alt="Evidencia">
+                    <span class="block text-[9px] font-bold text-slate-400 tracking-wider uppercase mt-1.5">
+                      EVIDENCIA FOTOGRÁFICA 1
+                    </span>
+                  </div>
+
+                  <!-- CAMPOS DE INFORMACIÓN -->
+                  <div class="space-y-1.5">
+                    <div class="bg-slate-50 border border-slate-200/80 p-2 rounded-xl">
+                      <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">📍 COLONIA</span>
+                      <p class="text-xs font-semibold text-slate-800 m-0 mt-0.5">${pin.colonia || 'Sin especificar'}</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-2 rounded-xl">
+                      <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">📍 DIRECCIÓN</span>
+                      <p class="text-xs font-semibold text-slate-800 m-0 mt-0.5">${pin.domicilio}</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-2 rounded-xl">
+                      <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">👤 RESPONSABLE</span>
+                      <p class="text-xs font-semibold text-slate-800 m-0 mt-0.5 uppercase">${pin.responsable}</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200/80 p-2 rounded-xl">
+                      <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">📝 OBSERVACIONES</span>
+                      <p class="text-[11px] font-medium text-slate-600 m-0 mt-0.5 leading-snug">${pin.notes}</p>
+                    </div>
+                  </div>
+
+                  <!-- BOTÓN GOOGLE MAPS -->
+                  <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer"
+                     class="w-full bg-[#7A0026] hover:bg-[#5e001d] text-white py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center shadow-xs no-underline block text-center">
+                    Abrir ubicación en Google Maps
+                  </a>
+
+                </div>
+              `;
+
               const marker = L.marker([pin.lat, pin.lng], { icon: customIcon });
               marker.bindPopup(popupContent);
               markerLayerGroup.addLayer(marker);
