@@ -18,10 +18,10 @@
 
     <!-- Imagen de Fondo con Overlay Oscuro -->
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80"
+        <img src="C:\Users\enrri\OneDrive\Desktop\Boceto-mapa\index.html\ICC-APP\WhatsApp Image 2026-08-31 at 6.05.04 PM.jpeg"
              alt="Fondo Plataforma ICC"
-             class="w-full h-full object-cover object-center opacity-25">
-        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
+             class="w-full h-full object-cover object-center opacity-100 contrast-110 brightness-105">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-900/50 to-slate-950/90 backdrop-contrast-105"></div>
     </div>
 
     <!-- BARRA NAVEGACIÓN PRINCIPAL -->
@@ -35,35 +35,35 @@
                 </div>
                 <div>
                     <span class="font-bold text-lg text-white tracking-tight block leading-none">ICC</span>
-                    <span class="text-[10px] text-indigo-400 font-medium tracking-wider uppercase">Plataforma Territorial</span>
+                    <span class="text-[10px] text-white font-medium tracking-wider uppercase">Plataforma Territorial</span>
                 </div>
             </div>
 
             <!-- Menú Horizontal Escritorio (Protegido por función de seguridad) -->
-            <nav class="hidden md:flex items-center gap-1 bg-slate-800/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/60">
-                <button onclick="requerirSesion('mapa.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
-                    <i data-lucide="map" class="w-4 h-4 text-indigo-400"></i>
-                    Mapa
-                </button>
-                <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
-                    <i data-lucide="map-pin" class="w-4 h-4 text-indigo-400"></i>
-                    Territorio
-                </button>
-                <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
-                    <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i>
-                    Asambleas
-                </button>
-                <button onclick="requerirSesion('padron.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
-                    <i data-lucide="id-card" class="w-4 h-4 text-indigo-400"></i>
-                    Padrón
-                </button>
-                <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
-                    <i data-lucide="calendar" class="w-4 h-4 text-indigo-400"></i>
-                    Calendario
-                </button>
-            </nav>
+            <nav class="hidden md:flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/80">
+                <!--  <button onclick="requerirSesion('mapa.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-300 hover:text-white hover:bg-indigo-600/80 transition cursor-pointer">
+                      <i data-lucide="map" class="w-4 h-4 text-indigo-400"></i>
+                      Mapa
+                  </button>-->
+                  <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white hover:text-white hover:bg-white/10 transition cursor-pointer">
+                      <i data-lucide="map-pin" class="w-4 h-4 text-white"></i>
+                      Territorio
+                  </button>
+                  <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white hover:text-white hover:bg-white/10 transition cursor-pointer">
+                      <i data-lucide="users" class="w-4 h-4 text-white"></i>
+                      Asambleas
+                  </button>
+                  <button onclick="requerirSesion('padron.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white hover:text-white hover:bg-white/10 transition cursor-pointer">
+                      <i data-lucide="id-card" class="w-4 h-4 text-white"></i>
+                      Padrón
+                  </button>
+                  <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white hover:text-white hover:bg-white/10 transition cursor-pointer">
+                      <i data-lucide="calendar" class="w-4 h-4 text-white"></i>
+                      Calendario
+                  </button>
+              </nav>
 
-            <!-- Botón dinámico (Iniciar Sesión / Cerrar Sesión) -->
+              <!-- Botón dinámico (Iniciar Sesión / Cerrar Sesión) -->
             <div class="flex items-center gap-3" id="auth-button-container">
 
                 <!-- Se llena automáticamente vía JavaScript según el estado de la sesión -->
@@ -74,29 +74,29 @@
 
         <!-- Menú Móvil Desplazable (Protegido) -->
         <div class="md:hidden mt-3 flex items-center gap-2 overflow-x-auto pb-2">
-            <button onclick="requerirSesion('mapa.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
-                <i data-lucide="map" class="w-3.5 h-3.5 text-indigo-400"></i> Mapa
-            </button>
-            <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-400"></i> Territorio
-            </button>
-            <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
-                <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400"></i> Asambleas
-            </button>
-            <button onclick="requerirSesion('padron.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
-                <i data-lucide="id-card" class="w-3.5 h-3.5 text-indigo-400"></i> Padrón
-            </button>
-            <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i> Calendario
-            </button>
-        </div>
-    </header>
+            <!--<button onclick="requerirSesion('mapa.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700 whitespace-nowrap">
+               <i data-lucide="map" class="w-3.5 h-3.5 text-indigo-400"></i> Mapa
+           </button>-->
+           <button onclick="requerirSesion('territorio.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-black border border-slate-700 whitespace-nowrap">
+               <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i> Territorio
+           </button>
+           <button onclick="requerirSesion('asambleas.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-black border border-slate-700 whitespace-nowrap">
+               <i data-lucide="users" class="w-3.5 h-3.5 text-black"></i> Asambleas
+           </button>
+           <button onclick="requerirSesion('padron.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-black border border-slate-700 whitespace-nowrap">
+               <i data-lucide="id-card" class="w-3.5 h-3.5 text-indigo-400"></i> Padrón
+           </button>
+           <button onclick="requerirSesion('calendario.html')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-black border border-slate-700 whitespace-nowrap">
+               <i data-lucide="calendar" class="w-3.5 h-3.5 text-black"></i> Calendario
+           </button>
+       </div>
+   </header>
 
-    <!-- SECCIÓN HERO CENTRALIZADA -->
+   <!-- SECCIÓN HERO CENTRALIZADA -->
     <main class="relative z-10 my-auto text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-12">
 
-            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 mb-6">
-                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-white border bg-white/10 mb-6">
+                <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
                 Sistema de Control y Gestión Territorial
             </span>
 
@@ -166,22 +166,22 @@
             `;
 
             heroCtaContainer.innerHTML = `
-                <a href="mapa.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2">
-                    <i data-lucide="map" class="w-5 h-5"></i>
-                    Ir al Mapa Territorial
-                </a>
+                <a href="mapa.html" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/80 hover:bg-white/10 text-white font-bold text-base transition shadow-xl flex items-center justify-center gap-2">
+    <i data-lucide="map" class="w-5 h-5"></i>
+    Ir al Mapa Territorial
+</a>
             `;
         } else {
             // Usuario NO autenticado: Mostrar botón de Iniciar Sesión
             authContainer.innerHTML = `
-                <a href="login.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/30">
+                <a href="login.html" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/80 hover:bg-white/10 text-white font-bold text-base transition shadow-xl flex items-center justify-center gap-2">
                     <i data-lucide="log-in" class="w-4 h-4"></i>
                     Iniciar Sesión
                 </a>
             `;
 
             heroCtaContainer.innerHTML = `
-                <a href="login.html" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-base transition shadow-xl shadow-indigo-600/30 flex items-center justify-center gap-2">
+                <a href="login.html" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-white/80 hover:bg-white/10 text-white font-bold text-base transition shadow-xl flex items-center justify-center gap-2">
                     <i data-lucide="log-in" class="w-5 h-5"></i>
                     Iniciar Sesión
                 </a>
